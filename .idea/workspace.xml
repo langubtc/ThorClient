@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="63857362-4427-43bc-bca4-b0fa43d02534" name="Default Changelist" comment="代码提交">
-      <change beforePath="$PROJECT_DIR$/ThorGui.exe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/dbconfig.go" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/run.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,7 +25,9 @@
     <option name="indexEntireGoPath" value="false" />
   </component>
   <component name="ProjectId" id="1kEO87GpIFqSAOat71Kgmv71Lrm" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -36,11 +38,12 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/img" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\UI\go\src\ThorGui\img" />
       <recent name="C:\Users\UI\go\src\ThorGui" />
       <recent name="C:\Users\UI\go\src\ThorGui\icon" />
       <recent name="C:\Users\UI\go\src\ThorGui\config" />
@@ -124,10 +127,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1605871293795" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1605871713548">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1605871831192">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605871713548" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605871831192" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1605839612475">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
