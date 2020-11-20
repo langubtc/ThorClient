@@ -11,3 +11,5 @@ go build -ldflags="-linkmode internal -H windowsgui"
 - 查询矿机运行日志
 
 ## 功能预览
+
+![image](https://github.com/langubtc/ThorClient/blob/master/img/run.png)
