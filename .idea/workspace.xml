@@ -1,35 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="63857362-4427-43bc-bca4-b0fa43d02534" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/ThorGui.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ThorGui.exe" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config/config.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config/dbconfig.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config/minerConfig.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config/result.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icon/edit.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icon/refresh.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icon/restart.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icon/scan.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icon/search.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/icon/thor.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitor/reboot.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitor/runstats.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitor/scan.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/monitor/update.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/thorgui.manifest" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/thorgui.syso" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/thormonitor/mainfunc.go" afterDir="false" />
+    <list default="true" id="63857362-4427-43bc-bca4-b0fa43d02534" name="Default Changelist" comment="代码提交">
+      <change beforePath="$PROJECT_DIR$/ThorGui.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/dbconfig.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +32,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="GO_FMT" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="go.import.settings.migrated" value="true" />
@@ -101,14 +76,18 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="代码提交" />
+    <option name="LAST_COMMIT_MESSAGE" value="代码提交" />
+  </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
   </component>
   <component name="WindowStateProjectService">
-    <state x="676" y="320" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1605854405990">
+    <state x="676" y="320" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1605871777223">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="676" y="320" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605854405990" />
+    <state x="676" y="320" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040@0.0.1920.1040" timestamp="1605871777223" />
     <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1605871284559">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -145,10 +124,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1605871293795" />
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1605871614010">
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2" timestamp="1605871713548">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605871614010" />
+    <state x="552" y="253" key="Vcs.Push.Dialog.v2/0.0.1920.1040@0.0.1920.1040" timestamp="1605871713548" />
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1605839612475">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
