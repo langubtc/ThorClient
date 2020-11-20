@@ -1,0 +1,10 @@
+{
+  "User":"THOR",
+  "Password":"123",
+  "Port":22,
+  "IpRange":"192.168.31.0/24",
+  "ScanLogRow": 1000,
+  "DefaultLogRow": 100,
+  "Version":"v0.1.3"
+}
+
