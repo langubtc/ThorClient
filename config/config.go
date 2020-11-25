@@ -9,12 +9,13 @@ import (
 var config *ConfigJson
 
 type ConfigJson struct {
-	User       string
-	Password   string
-	Port       int
-	IpRange    string
-	ScanLogRow int
-	Version    string
+	User          string
+	Password      string
+	Port          int
+	IpRange       string
+	ScanLogRow    int
+	DefaultLogRow int
+	Version       string
 }
 
 // 初始化全局配置

@@ -158,6 +158,7 @@ func (m *FooModel) returnData() {
 	}
 
 	m.PublishRowsReset()
+	m.Sort(m.sortColumn, m.sortOrder)
 
 }
 
@@ -174,6 +175,7 @@ func (m *FooModel) ResetRows() {
 	}
 
 	m.PublishRowsReset()
+	m.Sort(m.sortColumn, m.sortOrder)
 
 }
 
@@ -192,6 +194,7 @@ func (m *FooModel) filerRows(miner string) {
 	}
 
 	m.PublishRowsReset()
+	m.Sort(m.sortColumn, m.sortOrder)
 
 }
 
@@ -241,13 +244,15 @@ func MinerRunDetail(owner walk.Form, detail string) {
 		HSplitter{
 			Children: []Widget{
 				TextEdit{
+					Background: SolidColorBrush{Color: walk.RGB(0, 0, 0)},
 					Font: Font{
 						PointSize: 11,
 					},
-					AssignTo: &outTE,
-					ReadOnly: true,
-					Text:     newdetail,
-					VScroll:  true,
+					TextColor: walk.RGB(255, 255, 255),
+					AssignTo:  &outTE,
+					ReadOnly:  true,
+					Text:      newdetail,
+					VScroll:   true,
 				},
 			},
 		},
@@ -301,8 +306,9 @@ func main() {
 		Font:     font,
 		Icon:     "icon/thor.ico", //设置Icon
 		Title:    titleStr,        // 窗口标题设置
-		Size:     Size{1180, 900}, //窗体的大小
-		Layout:   VBox{},          // 窗体的布局形式
+		Size:     Size{1000, 700}, //窗体的大小
+		MinSize:  Size{600, 600},
+		Layout:   VBox{}, // 窗体的布局形式
 
 		// 定义菜单
 		MenuItems: []MenuItem{
@@ -340,21 +346,22 @@ func main() {
 			VSplitter{
 				Children: []Widget{
 					GroupBox{
-						Layout: Grid{Columns: 4, Spacing: 8},
+						Layout: Grid{Columns: 6, Spacing: 20},
+
 						Children: []Widget{
 							Label{
 								Text: "扫描网段:",
 							},
 							LineEdit{
-								MinSize:  Size{160, 0},
-								MaxSize:  Size{200, 30},
-								AssignTo: &ScanNet,
-								Text:     sys_config.IpRange,
+								MaxSize:     Size{200, 30},
+								AssignTo:    &ScanNet,
+								Text:        sys_config.IpRange,
+								ToolTipText: "输入网段样例:192.168.1.0/24",
 							},
 
 							PushButton{ //按钮控件
 								Text:    "开始扫描",
-								MaxSize: Size{120, 30},
+								MaxSize: Size{200, 80},
 								Image:   "./icon/scan.png",
 								OnClicked: func() {
 									//定义个空数组用户传参
@@ -374,6 +381,8 @@ func main() {
 
 										model.ResetRows()
 
+										walk.MsgBox(mw, "提示", "扫描完成", walk.MsgBoxIconInformation)
+
 										if err != nil {
 											walk.MsgBox(mw, "提示", "系统错误!", walk.MsgBoxIconError)
 										}
@@ -382,6 +391,17 @@ func main() {
 									}
 
 								},
+							},
+
+							Label{
+								ToolTipText: "扫描结果",
+								Text:        "扫描总数/成功/失败:",
+							},
+
+							Label{
+								Text:     "0/0/0",
+								Name:     "result",
+								AssignTo: &result,
 							},
 						},
 					},
@@ -459,15 +479,103 @@ func main() {
 									}
 								},
 							},
-							Label{
-								ToolTipText: "扫描结果",
-								Text:        "扫描总数/成功/失败:",
+
+							PushButton{
+								Text:  "修改",
+								Image: "./icon/edit.png",
+								OnClicked: func() {
+									var iplist []string
+									indexs := tv.SelectedIndexes()
+									if len(indexs) == 0 {
+										walk.MsgBox(mw, "提示", "请选择矿机!", walk.MsgBoxIconError)
+										return
+									}
+
+									// 遍历选择的矿机进行重启
+									for i := 0; i < len(indexs); i++ {
+
+										var minerIpList []string
+										itemValue := model.GetByIndex(int64(indexs[i]))
+										iplist = append(iplist, itemValue.MinerIp)
+
+										//分台设置配置
+										minerIpList = append(minerIpList, itemValue.MinerIp)
+
+										fmt.Println(itemValue.ServerStr, poolIp.Text())
+										if poolIp.Text() != "" {
+											_, _, _, _ = thormonitor.RunMonitor("update", iplist, itemValue.ServerStr, poolIp.Text())
+										}
+										if Miner.Text() != "" {
+											_, _, _, _ = thormonitor.RunMonitor("update", iplist, itemValue.Wallet, Miner.Text())
+										}
+										if WorkerName.Text() != "" {
+											_, _, _, _ = thormonitor.RunMonitor("update", iplist, itemValue.Worker, WorkerName.Text())
+										}
+
+									}
+
+									//批量重启
+									total, active, inactive, _ := thormonitor.RunMonitor("reboot", iplist, "", "")
+									rebootMiner := fmt.Sprintf("设置成功,选择%d台矿机,成功%d,失败%d", total, active, inactive)
+
+									walk.MsgBox(mw, "提示", rebootMiner, walk.MsgBoxIconInformation)
+								},
 							},
 
-							Label{
-								Text:     "0/0/0",
-								Name:     "result",
-								AssignTo: &result,
+							PushButton{
+								Text:  "重启",
+								Image: "./icon/restart.png",
+								OnClicked: func() {
+
+									var iplist []string
+									indexs := tv.SelectedIndexes()
+									if len(indexs) == 0 {
+										walk.MsgBox(mw, "提示", "请选择矿机!", walk.MsgBoxIconError)
+										return
+									}
+
+									// 遍历选择的矿机进行重启
+									for i := 0; i < len(indexs); i++ {
+										itemValue := model.GetByIndex(int64(indexs[i]))
+										iplist = append(iplist, itemValue.MinerIp)
+									}
+
+									//重启结果回显
+									total, active, inactive, _ := thormonitor.RunMonitor("reboot", iplist, "", "")
+
+									rebootMiner := fmt.Sprintf("重启成功,选择%d台矿机,成功%d,失败%d", total, active, inactive)
+
+									walk.MsgBox(mw, "提示", rebootMiner, walk.MsgBoxIconInformation)
+								},
+							},
+
+							PushButton{
+								Text:  "查看状态",
+								Image: "./icon/refresh.png",
+								OnClicked: func() {
+									var iplist []string
+
+									indexs := tv.SelectedIndexes()
+									if len(indexs) == 0 {
+										walk.MsgBox(mw, "提示", "请选择矿机!", walk.MsgBoxIconError)
+										return
+									}
+									//判断选择是否是单选
+									if len(indexs) > 1 {
+										walk.MsgBox(mw, "提示", "只能单选一台矿机!", walk.MsgBoxIconError)
+									} else {
+
+										// 遍历选择的矿机进行重启
+										for i := 0; i < len(indexs); i++ {
+											itemValue := model.GetByIndex(int64(indexs[i]))
+											iplist = append(iplist, itemValue.MinerIp)
+										}
+
+										_, _, _, statsResult := thormonitor.RunMonitor("stats", iplist, "", "")
+										fmt.Println(statsResult)
+										MinerRunDetail(mw, statsResult)
+									}
+								},
 							},
 						},
 					},
@@ -503,102 +611,9 @@ func main() {
 							Composite{
 								Layout: HBox{},
 								Children: []Widget{
-									PushButton{
-										Text:  "修改",
-										Image: "./icon/edit.png",
-										OnClicked: func() {
-											var iplist []string
-											indexs := tv.SelectedIndexes()
-											if len(indexs) == 0 {
-												walk.MsgBox(mw, "提示", "请选择矿机!", walk.MsgBoxIconError)
-												return
-											}
-
-											// 遍历选择的矿机进行重启
-											for i := 0; i < len(indexs); i++ {
-
-												var minerIpList []string
-												itemValue := model.GetByIndex(int64(indexs[i]))
-												iplist = append(iplist, itemValue.MinerIp)
-
-												//分台设置配置
-												minerIpList = append(minerIpList, itemValue.MinerIp)
-
-												fmt.Println(itemValue.ServerStr, poolIp.Text())
-												if poolIp.Text() != "" {
-													_, _, _, _ = thormonitor.RunMonitor("update", iplist, itemValue.ServerStr, poolIp.Text())
-												}
-												if Miner.Text() != "" {
-													_, _, _, _ = thormonitor.RunMonitor("update", iplist, itemValue.Wallet, Miner.Text())
-												}
-												if WorkerName.Text() != "" {
-													_, _, _, _ = thormonitor.RunMonitor("update", iplist, itemValue.Worker, WorkerName.Text())
-												}
-
-											}
-
-											//批量重启
-											total, active, inactive, _ := thormonitor.RunMonitor("reboot", iplist, "", "")
-											rebootMiner := fmt.Sprintf("设置成功,选择%d台矿机,成功%d,失败%d", total, active, inactive)
-
-											walk.MsgBox(mw, "提示", rebootMiner, walk.MsgBoxIconInformation)
-										},
-									},
-
-									PushButton{
-										Text:  "重启",
-										Image: "./icon/restart.png",
-										OnClicked: func() {
-
-											var iplist []string
-											indexs := tv.SelectedIndexes()
-											if len(indexs) == 0 {
-												walk.MsgBox(mw, "提示", "请选择矿机!", walk.MsgBoxIconError)
-												return
-											}
-
-											// 遍历选择的矿机进行重启
-											for i := 0; i < len(indexs); i++ {
-												itemValue := model.GetByIndex(int64(indexs[i]))
-												iplist = append(iplist, itemValue.MinerIp)
-											}
-
-											//重启结果回显
-											total, active, inactive, _ := thormonitor.RunMonitor("reboot", iplist, "", "")
-
-											rebootMiner := fmt.Sprintf("重启成功,选择%d台矿机,成功%d,失败%d", total, active, inactive)
-
-											walk.MsgBox(mw, "提示", rebootMiner, walk.MsgBoxIconInformation)
-										},
-									},
-
-									PushButton{
-										Text:  "查看状态",
-										Image: "./icon/refresh.png",
-										OnClicked: func() {
-											var iplist []string
-
-											indexs := tv.SelectedIndexes()
-											if len(indexs) == 0 {
-												walk.MsgBox(mw, "提示", "请选择矿机!", walk.MsgBoxIconError)
-												return
-											}
-											//判断选择是否是单选
-											if len(indexs) > 1 {
-												walk.MsgBox(mw, "提示", "只能单选一台矿机!", walk.MsgBoxIconError)
-											} else {
-
-												// 遍历选择的矿机进行重启
-												for i := 0; i < len(indexs); i++ {
-													itemValue := model.GetByIndex(int64(indexs[i]))
-													iplist = append(iplist, itemValue.MinerIp)
-												}
-
-												_, _, _, statsResult := thormonitor.RunMonitor("stats", iplist, "", "")
-												fmt.Println(statsResult)
-												MinerRunDetail(mw, statsResult)
-											}
-										},
+									Label{
+										ToolTipText: "版本",
+										Text:        "Build Date: 2020-11-20",
 									},
 								},
 							},

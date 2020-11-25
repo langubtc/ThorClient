@@ -147,7 +147,7 @@ func RunMonitor(opType string, ipList []string, oldstring, newstring string) (to
 		cmdCommand = monitor.RebootCommand(conf.Password)
 		ServerIp = ipList
 	case "stats":
-		cmdCommand = monitor.ResponseCommand(50)
+		cmdCommand = monitor.ResponseCommand(conf.DefaultLogRow)
 		ServerIp = ipList
 	case "update":
 		cmdCommand = monitor.UpdateConfig(oldstring, newstring)
