@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
-	_ "github.com/mattn/go-sqlite3"
 	"io/ioutil"
 	"log"
 	"sort"
