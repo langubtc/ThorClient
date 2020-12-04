@@ -17,8 +17,5 @@ go build -ldflags="-linkmode internal -H windowsgui"
 
 ## 功能预览
 
-矿机详情
-![image](https://github.com/langubtc/ThorClient/blob/master/img/run.png)
+![image](https://github.com/langubtc/ThorClient/blob/master/img/20201204090348.png)
 
-矿机重启
-![image](https://github.com/langubtc/ThorClient/blob/master/img/view.png)
