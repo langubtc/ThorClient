@@ -1,7 +1,7 @@
 ## 编译
 
 ```
-go build -ldflags="-linkmode internal -H windowsgui"
+go build -ldflags="-H windowsgui"
 ```
 
 ## 技术实现
