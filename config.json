@@ -5,6 +5,7 @@
   "IpRange":"192.168.31.0/24",
   "ScanLogRow": 1000,
   "DefaultLogRow": 100,
-  "Version":"v0.1.4"
+  "Version":"v0.1.4",
+  "Timeout": 5
 }
 

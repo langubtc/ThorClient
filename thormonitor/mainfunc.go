@@ -16,6 +16,8 @@ import (
 	"time"
 )
 
+var conf = config.LoadConfig() //加载配置文件
+
 type CommandResult struct {
 	Ip     string
 	Target string
@@ -25,14 +27,15 @@ type CommandResult struct {
 }
 
 type Foo struct {
-	Index      int
-	Worker     string
-	MinerIp    string
-	Wallet     string
-	ServerIp   string
-	ServerStr  string
-	ServerPort string
-	ScanTime   string
+	Index       int
+	Worker      string
+	MinerIp     string
+	Wallet      string
+	MinerStatus string
+	ServerIp    string
+	ServerStr   string
+	ServerPort  string
+	ScanTime    string
 }
 
 func MinerIPFunc(ipString string) ([]string, error) {
@@ -61,11 +64,11 @@ func remoteExec(user, ip, password, opType string, port int, command string) (re
 		HostKeyCallback: func(hostname string, remote net.Addr, key ssh.PublicKey) error {
 			return nil
 		},
-		Timeout: 3 * time.Second,
+		Timeout: time.Duration(conf.Timeout) * time.Second,
 	})
 
 	if err != nil {
-		commandStr = "SSH Connect Error"
+		commandStr = "无法连接"
 		return CommandResult{
 			Ip:     ip,
 			Target: ip,
@@ -136,8 +139,6 @@ func RunMonitor(opType string, ipList []string, oldstring, newstring string) (to
 	var InactiveResult = 0
 	var statsResult string
 
-	conf := config.LoadConfig() //加载配置文件
-
 	switch opType {
 
 	case "scan":
@@ -163,6 +164,7 @@ func RunMonitor(opType string, ipList []string, oldstring, newstring string) (to
 	var wg_processing sync.WaitGroup
 
 	var saveMiner []Foo
+	var OpStatus string
 
 	// 开启执行线程
 	for _, t := range ServerIp {
@@ -197,12 +199,19 @@ func RunMonitor(opType string, ipList []string, oldstring, newstring string) (to
 				}
 				if opType == "scan" {
 					returnDecodeResult := monitor.DecodeMinerInfo(o.Cmdout)
+
+					if o.Status == 0 {
+						OpStatus = "正常"
+					} else {
+						OpStatus = o.Cmdout
+					}
 					//fmt.Println("解析结果", o.Target,
 					//	returnDecodeResult.Stratum, returnDecodeResult.Miner, returnDecodeResult.Worker, returnDecodeResult.PoolIP, returnDecodeResult.PoolPort)
 					saveMiner = append(saveMiner, Foo{countResult,
 						returnDecodeResult.Worker,
 						o.Ip,
 						returnDecodeResult.Miner,
+						OpStatus,
 						returnDecodeResult.PoolIP,
 						returnDecodeResult.PoolStr,
 						returnDecodeResult.PoolPort,
@@ -215,7 +224,7 @@ func RunMonitor(opType string, ipList []string, oldstring, newstring string) (to
 					statsResult = statsResult + o.Cmdout
 				}
 				if opType == "scan" {
-					saveMiner = append(saveMiner, Foo{countResult, "", o.Ip, o.Cmdout, "", "", "", scanTime})
+					saveMiner = append(saveMiner, Foo{countResult, "", o.Ip, "", o.Cmdout, "", "", "", scanTime})
 				}
 			}
 			countResult += 1 //记录扫描总数

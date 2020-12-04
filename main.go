@@ -26,14 +26,15 @@ type MinerPool struct {
 }
 
 type Foo struct {
-	Index      int
-	Worker     string
-	MinerIp    string
-	Wallet     string
-	ServerIp   string
-	ServerStr  string
-	ServerPort string
-	ScanTime   string
+	Index       int
+	Worker      string
+	MinerIp     string
+	Wallet      string
+	MinerStatus string
+	ServerIp    string
+	ServerStr   string
+	ServerPort  string
+	ScanTime    string
 }
 
 type FooModel struct {
@@ -86,12 +87,13 @@ func (m *FooModel) Sort(col int, order walk.SortOrder) error {
 			return c(a.Worker < b.Worker)
 		case 4:
 			return c(a.ServerStr < b.ServerStr)
-
 		case 5:
-			return c(a.ServerIp < b.ServerIp)
+			return c(a.MinerStatus < b.MinerStatus)
 		case 6:
-			return c(a.ServerPort < b.ServerPort)
+			return c(a.ServerIp < b.ServerIp)
 		case 7:
+			return c(a.ServerPort < b.ServerPort)
+		case 8:
 			return c(a.ScanTime < b.ScanTime)
 
 		}
@@ -305,7 +307,7 @@ func main() {
 		Font:     font,
 		Icon:     "icon/thor.ico", //设置Icon
 		Title:    titleStr,        // 窗口标题设置
-		Size:     Size{1000, 700}, //窗体的大小
+		Size:     Size{1200, 800}, //窗体的大小
 		MinSize:  Size{600, 600},
 		Layout:   VBox{}, // 窗体的布局形式
 
@@ -376,15 +378,16 @@ func main() {
 
 										resultStr := fmt.Sprintf("%d/%d/%d", total, active, inactive)
 
-										err = result.SetText(resultStr)
-
 										model.ResetRows()
 
-										walk.MsgBox(mw, "提示", "扫描完成", walk.MsgBoxIconInformation)
+										fmt.Println(resultStr)
 
 										if err != nil {
 											walk.MsgBox(mw, "提示", "系统错误!", walk.MsgBoxIconError)
+										} else {
+											walk.MsgBox(mw, "提示", "扫描完成", walk.MsgBoxIconInformation)
 										}
+										err = result.SetText(resultStr)
 									} else {
 										walk.MsgBox(mw, "提示", "网段错误!", walk.MsgBoxIconError)
 									}
@@ -400,6 +403,7 @@ func main() {
 							Label{
 								Text:     "0/0/0",
 								Name:     "result",
+								MinSize:  Size{50, 30},
 								AssignTo: &result,
 							},
 						},
@@ -593,11 +597,12 @@ func main() {
 
 									{Title: "#", Name: "Index", Width: 50},
 									{Title: "矿机IP", Width: 100, Name: "MinerIp"},
-									{Title: "矿工钱包", Width: 400, Name: "Wallet"},
+									{Title: "矿工钱包", Width: 350, Name: "Wallet"},
 									{Title: "矿工号", Name: "Worker", Width: 50},
-									{Title: "矿池接入", Alignment: AlignFar, Width: 200, Name: "ServerStr"},
+									{Title: "矿池接入", Alignment: AlignFar, Width: 150, Name: "ServerStr"},
 									{Title: "矿池IP", Alignment: AlignFar, Width: 100, Name: "ServerIp"},
-									{Title: "端口", Name: "ServerPort", Width: 50},
+									{Title: "状态", Alignment: AlignFar, Width: 100, Name: "MinerStatus"},
+									{Title: "端口", Alignment: AlignFar, Name: "ServerPort", Width: 50},
 									{Title: "扫描时间", Format: "2006-01-02 15:04:05", Width: 150, Name: "ScanTime"},
 								},
 								Model: model,
@@ -612,7 +617,7 @@ func main() {
 								Children: []Widget{
 									Label{
 										ToolTipText: "版本",
-										Text:        "Build Date: 2020-11-20",
+										Text:        "Build Date: 2020-12-01  By: 蓝谷骑兵",
 									},
 								},
 							},

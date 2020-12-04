@@ -15,6 +15,7 @@ type ConfigJson struct {
 	IpRange       string
 	ScanLogRow    int
 	DefaultLogRow int
+	Timeout       int
 	Version       string
 }
 
