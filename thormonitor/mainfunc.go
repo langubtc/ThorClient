@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net"
+	"reflect"
 	"strconv"
 	"sync"
 	"time"
@@ -58,14 +59,14 @@ func remoteExec(user, ip, password, opType string, port int, command string) (re
 	// 拼接目标地址 ip:port
 	sshHost := ip + ":" + strconv.Itoa(port)
 
-	client, err := ssh.Dial("tcp", sshHost, &ssh.ClientConfig{
+	client, err := SSHDialTimeout("tcp", sshHost, &ssh.ClientConfig{
 		User: user,
 		Auth: []ssh.AuthMethod{ssh.Password(password)},
 		HostKeyCallback: func(hostname string, remote net.Addr, key ssh.PublicKey) error {
 			return nil
 		},
 		Timeout: time.Duration(conf.Timeout) * time.Second,
-	})
+	}, time.Duration(conf.Timeout)*time.Second)
 
 	if err != nil {
 		commandStr = "无法连接"
@@ -108,11 +109,10 @@ func remoteExec(user, ip, password, opType string, port int, command string) (re
 	session.Stdout = &b
 
 	if err := session.Run(command); err != nil {
-
 		commandStr = "Failed to run: " + err.Error()
 	}
 
-	//fmt.Println(b.String())
+	fmt.Println(b.String(), ip, "<<<<<<<<")
 
 	commandStr = b.String()
 
@@ -144,6 +144,9 @@ func RunMonitor(opType string, ipList []string, oldstring, newstring string) (to
 	case "scan":
 		cmdCommand = "grep 'miner' 桌面/钱包配置.sh"
 		ServerIp = ipList
+	case "poweroff":
+		cmdCommand = monitor.PowerOffCommand(conf.Password)
+		ServerIp = ipList
 	case "reboot":
 		cmdCommand = monitor.RebootCommand(conf.Password)
 		ServerIp = ipList
@@ -165,7 +168,7 @@ func RunMonitor(opType string, ipList []string, oldstring, newstring string) (to
 
 	var saveMiner []Foo
 	var OpStatus string
-
+	fmt.Println(ServerIp)
 	// 开启执行线程
 	for _, t := range ServerIp {
 		wg_command.Add(1)
@@ -189,9 +192,8 @@ func RunMonitor(opType string, ipList []string, oldstring, newstring string) (to
 	go func() {
 		defer wg_processing.Done()
 		for o := range outchan {
-
 			scanTime := time.Now().Format("2006-01-02 15:04:05")
-
+			fmt.Println(o.Ip, o.Cmdout, o.Status, reflect.TypeOf(o.Status))
 			if o.Status == 0 {
 				ActiveResult += 1 //记录成功数
 				if opType == "stats" {
@@ -218,6 +220,7 @@ func RunMonitor(opType string, ipList []string, oldstring, newstring string) (to
 						scanTime,
 					})
 				}
+
 			} else {
 				InactiveResult += 1 //记录失败
 				if opType == "stats" {
@@ -228,9 +231,12 @@ func RunMonitor(opType string, ipList []string, oldstring, newstring string) (to
 				}
 			}
 			countResult += 1 //记录扫描总数
+			fmt.Println(countResult, ActiveResult, InactiveResult)
 		}
+
 	}()
 
+	fmt.Println(countResult, ActiveResult, InactiveResult)
 	// wait untill all goroutines to finish and close the channel
 	wg_command.Wait()
 	close(outchan)

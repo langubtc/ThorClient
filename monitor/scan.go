@@ -30,7 +30,7 @@ func DecodeMinerInfo(resultPool string) ResultDecode {
 		Stratum:  "stratum2+tcp://" + minerResult[1],
 		Miner:    worker[0],
 		Worker:   worker[1],
-		PoolStr:  strings.Replace(countSplit[1], "\n", "", -1),
+		PoolStr:  strings.Replace(countSplit[1], "\r\n", "", -1),
 		PoolIP:   poolResult[0],
 		PoolPort: poolResult[1],
 	}

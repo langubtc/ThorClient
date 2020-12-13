@@ -6,6 +6,6 @@
   "ScanLogRow": 1000,
   "DefaultLogRow": 100,
   "Version":"v0.1.4",
-  "Timeout": 5
+  "Timeout": 2
 }
 

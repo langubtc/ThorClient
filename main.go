@@ -239,7 +239,7 @@ func MinerRunDetail(owner walk.Form, detail string) {
 	var dialog = Dialog{}
 
 	dialog.Title = "矿机详情"
-	dialog.MinSize = Size{900, 800}
+	dialog.MinSize = Size{900, 600}
 	dialog.Layout = VBox{}
 	childrens := []Widget{
 		HSplitter{
@@ -504,7 +504,6 @@ func main() {
 										//分台设置配置
 										minerIpList = append(minerIpList, itemValue.MinerIp)
 
-										fmt.Println(itemValue.ServerStr, poolIp.Text())
 										if poolIp.Text() != "" {
 											_, _, _, _ = thormonitor.RunMonitor("update", iplist, itemValue.ServerStr, poolIp.Text())
 										}
@@ -547,6 +546,32 @@ func main() {
 									total, active, inactive, _ := thormonitor.RunMonitor("reboot", iplist, "", "")
 
 									rebootMiner := fmt.Sprintf("重启成功,选择%d台矿机,成功%d,失败%d", total, active, inactive)
+
+									walk.MsgBox(mw, "提示", rebootMiner, walk.MsgBoxIconInformation)
+								},
+							},
+							PushButton{
+								Text:  "关机",
+								Image: "./icon/restart.png",
+								OnClicked: func() {
+
+									var iplist []string
+									indexs := tv.SelectedIndexes()
+									if len(indexs) == 0 {
+										walk.MsgBox(mw, "提示", "请选择矿机!", walk.MsgBoxIconError)
+										return
+									}
+
+									// 遍历选择的矿机进行重启
+									for i := 0; i < len(indexs); i++ {
+										itemValue := model.GetByIndex(int64(indexs[i]))
+										iplist = append(iplist, itemValue.MinerIp)
+									}
+
+									//重启结果回显
+									total, active, inactive, _ := thormonitor.RunMonitor("poweroff", iplist, "", "")
+
+									rebootMiner := fmt.Sprintf("关机成功,选择%d台矿机,成功%d,失败%d", total, active, inactive)
 
 									walk.MsgBox(mw, "提示", rebootMiner, walk.MsgBoxIconInformation)
 								},
